@@ -25,19 +25,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"maps"
 	"net/http"
 	"time"
 
 	"github.com/stretchr/testify/require"
+	"go.gearno.de/crypto/uuid"
 )
 
 // MCPClient wraps an authenticated MCP session for e2e testing.
 type MCPClient struct {
-	t          require.TestingT
-	baseURL    string
-	apiToken   string
-	sessionID  string
-	httpClient *http.Client
+	t                  require.TestingT
+	baseURL            string
+	apiToken           string
+	sessionID          string
+	analyticsSessionID string
+	httpClient         *http.Client
 }
 
 // CreateAPIKey creates a personal API key via the connect GraphQL API.
@@ -109,9 +112,10 @@ func NewMCPClient(t require.TestingT, owner *Client) *MCPClient {
 // It initializes an MCP session and stores the session ID.
 func NewMCPClientWithAccessToken(t require.TestingT, owner *Client, accessToken string) *MCPClient {
 	mc := &MCPClient{
-		t:        t,
-		baseURL:  owner.BaseURL() + "/api/mcp/v1",
-		apiToken: accessToken,
+		t:                  t,
+		baseURL:            owner.BaseURL() + "/api/mcp/v1",
+		apiToken:           accessToken,
+		analyticsSessionID: uuid.MustNewV4().String(),
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
@@ -238,9 +242,21 @@ type MCPContent struct {
 
 // CallTool invokes an MCP tool and returns the parsed result.
 func (mc *MCPClient) CallTool(toolName string, args map[string]any) *MCPToolResult {
+	callArgs := make(map[string]any, len(args)+2)
+	maps.Copy(callArgs, args)
+	if _, ok := callArgs["reason"]; !ok {
+		callArgs["reason"] = "Exercise " + toolName + " in an end-to-end test"
+	}
+	if _, ok := callArgs["user_intent"]; !ok {
+		callArgs["user_intent"] = "Verify the Probo MCP end-to-end behavior."
+	}
+
 	result, err := mc.doRequest("tools/call", map[string]any{
 		"name":      toolName,
-		"arguments": args,
+		"arguments": callArgs,
+		"_meta": map[string]any{
+			"session.id": mc.analyticsSessionID,
+		},
 	})
 	require.NoError(mc.t, err, "MCP tools/call %s failed", toolName)
 

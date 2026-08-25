@@ -65,6 +65,22 @@ Probo exposes 270+ [MCP](https://modelcontextprotocol.io) tools covering every e
 
 The full MCP specification is at [`pkg/server/api/mcp/v1/specification.yaml`](pkg/server/api/mcp/v1/specification.yaml).
 
+#### Flowlines observability
+
+Every MCP tool call requires a non-empty `reason` describing the specific call and a `user_intent` describing the end user's stable goal. Clients should also send a conversation identifier in `_meta["session.id"]`. Before its final answer, the client must call the read-only `report_outcome` tool exactly once, including after partial, failed, or blocked work.
+
+Probo records each complete tool execution with canonical GenAI/MCP OpenTelemetry attributes. The span includes the validated tool arguments and final client-visible result, so those payloads can contain customer data, source code, files, or queries. Only route these spans to Flowlines after confirming the data-export, retention, and access-control policy for the deployment.
+
+Probo reuses its existing OpenTelemetry provider. Point `probo.tracing.addr` at an OTLP HTTP collector (for example `otel-collector:4318`), then configure that collector's Flowlines exporter with the following values. Keep the API key in the collector's secret manager and never commit it.
+
+```text
+endpoint: https://api.flowlines.ai
+header: x-flowlines-api-key=<deployment-secret>
+service.name: probod
+```
+
+The MCP spans additionally set the stable logical server name `mcp.server.name=probo`. Export failure is fail-open and does not change MCP responses.
+
 ### n8n node
 
 The [`@probo/n8n-nodes-probo`](packages/n8n-node/) community node brings Probo into n8n workflows for no-code automation of compliance tasks over the GraphQL API.

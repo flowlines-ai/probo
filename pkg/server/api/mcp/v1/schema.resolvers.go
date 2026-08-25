@@ -8981,3 +8981,7 @@ func (r *Resolver) PublishAiSystemListTool(ctx context.Context, req *mcp.CallToo
 		DocumentVersionID: documentVersion.ID,
 	}, nil
 }
+
+func (r *Resolver) ReportOutcomeTool(ctx context.Context, req *mcp.CallToolRequest, input *types.ReportOutcomeInput) (*mcp.CallToolResult, types.ReportOutcomeOutput, error) {
+	return nil, types.ReportOutcomeOutput{Accepted: true}, nil
+}

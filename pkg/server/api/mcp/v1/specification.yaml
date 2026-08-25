@@ -5,6 +5,63 @@ info:
 
 components:
   schemas:
+    FlowlinesToolCallReason:
+      type: string
+      minLength: 1
+      maxLength: 128
+      pattern: '.*\S.*'
+      description: Short phrase explaining why the agent is making this specific call, without execution commentary
+
+    FlowlinesUserIntent:
+      type: string
+      minLength: 1
+      maxLength: 256
+      pattern: '.*\S.*'
+      description: Concise sentence stating what the end user is trying to accomplish; keep stable until the goal changes
+
+    ReportOutcomeStatus:
+      type: string
+      enum:
+        - accomplished
+        - partial
+        - failed
+
+    ReportOutcomeInput:
+      type: object
+      required:
+        - reason
+        - user_intent
+        - status
+        - outcome_summary
+      properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
+        status:
+          $ref: "#/components/schemas/ReportOutcomeStatus"
+        outcome_summary:
+          type: string
+          minLength: 1
+          pattern: '.*\S.*'
+          description: Two-to-three-sentence description of what the agent is about to tell the user
+        unmet_needs:
+          type: array
+          description: Concrete missing questions, filters, or inaccessible data, one item per need
+          items:
+            type: string
+            minLength: 1
+            pattern: '.*\S.*'
+
+    ReportOutcomeOutput:
+      type: object
+      required:
+        - accepted
+      properties:
+        accepted:
+          type: boolean
+          description: Whether the outcome report was accepted
+
     EmailAddress:
       type: string
       format: string
@@ -582,8 +639,14 @@ components:
     ListUsersInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -682,7 +745,14 @@ components:
 
     ListOrganizationsInput:
       type: object
+      required:
+        - reason
+        - user_intent
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -721,8 +791,14 @@ components:
     ListThirdPartiesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -761,8 +837,14 @@ components:
     ListChildThirdPartiesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - parent_third_party_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         parent_third_party_id:
           $ref: "#/components/schemas/GID"
           description: Parent third party ID
@@ -975,8 +1057,14 @@ components:
     ListThirdPartyRiskAssessmentsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - third_party_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         third_party_id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID
@@ -1006,11 +1094,17 @@ components:
     AddThirdPartyRiskAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - third_party_id
         - expires_at
         - data_sensitivity
         - business_impact
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         third_party_id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID
@@ -1039,9 +1133,15 @@ components:
     AddThirdPartyInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -1140,8 +1240,14 @@ components:
     UpdateThirdPartyInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID
@@ -1240,8 +1346,14 @@ components:
     GetThirdPartyInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Third party ID
@@ -1257,8 +1369,14 @@ components:
     DeleteThirdPartyInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID
@@ -1314,8 +1432,14 @@ components:
     ListThirdPartyContactsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - third_party_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         third_party_id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID
@@ -1345,12 +1469,18 @@ components:
     AddThirdPartyContactInput:
       type: object
       required:
+        - reason
+        - user_intent
         - third_party_id
         - full_name
         - email
         - phone
         - role
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         third_party_id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID
@@ -1378,8 +1508,14 @@ components:
     UpdateThirdPartyContactInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty contact ID
@@ -1407,8 +1543,14 @@ components:
     DeleteThirdPartyContactInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty contact ID
@@ -1456,8 +1598,14 @@ components:
     ListThirdPartyServicesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - third_party_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         third_party_id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID
@@ -1487,9 +1635,15 @@ components:
     AddThirdPartyServiceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - third_party_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         third_party_id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID
@@ -1511,8 +1665,14 @@ components:
     UpdateThirdPartyServiceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty service ID
@@ -1534,8 +1694,14 @@ components:
     DeleteThirdPartyServiceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty service ID
@@ -1552,9 +1718,15 @@ components:
     VetThirdPartyInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
         - website_url
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: ThirdParty ID to vet
@@ -1576,8 +1748,14 @@ components:
     GetUserInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: User ID (profile ID)
@@ -1593,12 +1771,18 @@ components:
     CreateUserInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - full_name
         - email_address
         - role
         - kind
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -1644,9 +1828,15 @@ components:
     InviteUserInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - profile_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -1666,10 +1856,16 @@ components:
     UpdateUserInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
         - full_name
         - kind
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: User (profile) ID
@@ -1732,10 +1928,16 @@ components:
     UpdateMembershipInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - membership_id
         - role
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -1757,9 +1959,15 @@ components:
     RemoveUserInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - profile_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -1779,9 +1987,15 @@ components:
     DeactivateUserInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - profile_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -1974,8 +2188,14 @@ components:
     ListRisksInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -2011,8 +2231,14 @@ components:
     GetRiskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk ID
@@ -2028,6 +2254,8 @@ components:
     AddRiskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - category
@@ -2035,6 +2263,10 @@ components:
         - inherent_likelihood
         - inherent_impact
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -2080,8 +2312,14 @@ components:
     UpdateRiskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk ID
@@ -2132,8 +2370,14 @@ components:
     DeleteRiskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk ID
@@ -2217,8 +2461,14 @@ components:
     ListMeasuresInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -2260,8 +2510,14 @@ components:
     ListMeasureRisksInput:
       type: object
       required:
+        - reason
+        - user_intent
         - measure_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         measure_id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2291,8 +2547,14 @@ components:
     ListMeasureControlsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - measure_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         measure_id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2322,8 +2584,14 @@ components:
     ListMeasureDocumentsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - measure_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         measure_id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2353,8 +2621,14 @@ components:
     ListMeasureTasksInput:
       type: object
       required:
+        - reason
+        - user_intent
         - measure_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         measure_id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2384,8 +2658,14 @@ components:
     ListMeasureEvidencesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - measure_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         measure_id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2466,8 +2746,14 @@ components:
     DeleteEvidenceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Evidence ID
@@ -2484,9 +2770,15 @@ components:
     LinkMeasureInput:
       type: object
       required:
+        - reason
+        - user_intent
         - measure_id
         - resource_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         measure_id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2500,9 +2792,15 @@ components:
     UnlinkMeasureInput:
       type: object
       required:
+        - reason
+        - user_intent
         - measure_id
         - resource_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         measure_id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2516,8 +2814,14 @@ components:
     GetMeasureInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2533,10 +2837,16 @@ components:
     AddMeasureInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - category
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -2561,8 +2871,14 @@ components:
     UpdateMeasureInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2591,8 +2907,14 @@ components:
     DeleteMeasureInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Measure ID
@@ -2660,8 +2982,14 @@ components:
     ListFrameworksInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -2691,8 +3019,14 @@ components:
     GetFrameworkInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Framework ID
@@ -2708,9 +3042,15 @@ components:
     AddFrameworkInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -2732,8 +3072,14 @@ components:
     UpdateFrameworkInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Framework ID
@@ -2756,8 +3102,14 @@ components:
     DeleteFrameworkInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Framework ID
@@ -2844,8 +3196,14 @@ components:
     ListAssetsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -2875,8 +3233,14 @@ components:
     GetAssetInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Asset ID
@@ -2892,6 +3256,8 @@ components:
     AddAssetInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - amount
@@ -2899,6 +3265,10 @@ components:
         - asset_type
         - data_types_stored
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -2934,8 +3304,14 @@ components:
     UpdateAssetInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Asset ID
@@ -2974,8 +3350,14 @@ components:
     DeleteAssetInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Asset ID
@@ -3192,8 +3574,14 @@ components:
     ListDevicesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -3226,8 +3614,14 @@ components:
     GetDeviceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Device ID
@@ -3246,8 +3640,14 @@ components:
     CreateDeviceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -3278,8 +3678,14 @@ components:
     RevokeDeviceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Device ID
@@ -3295,8 +3701,14 @@ components:
     DeleteDeviceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Device ID
@@ -3313,9 +3725,15 @@ components:
     SetDeviceOwnerInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
         - owner_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Device ID
@@ -3402,8 +3820,14 @@ components:
     ListDataInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -3432,8 +3856,14 @@ components:
     GetDatumInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Datum ID
@@ -3449,11 +3879,17 @@ components:
     AddDatumInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - data_classification
         - owner_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -3483,8 +3919,14 @@ components:
     UpdateDatumInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Datum ID
@@ -3517,8 +3959,14 @@ components:
     DeleteDatumInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Datum ID
@@ -3676,8 +4124,14 @@ components:
     ListFindingsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -3730,8 +4184,14 @@ components:
     GetFindingInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Finding ID
@@ -3747,9 +4207,15 @@ components:
     AddFindingInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - kind
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -3817,8 +4283,14 @@ components:
     UpdateFindingInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Finding ID
@@ -3883,8 +4355,14 @@ components:
     DeleteFindingInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Finding ID
@@ -3901,10 +4379,16 @@ components:
     LinkFindingAuditInput:
       type: object
       required:
+        - reason
+        - user_intent
         - finding_id
         - audit_id
         - reference_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         finding_id:
           $ref: "#/components/schemas/GID"
           description: Finding ID
@@ -3929,9 +4413,15 @@ components:
     UnlinkFindingAuditInput:
       type: object
       required:
+        - reason
+        - user_intent
         - finding_id
         - audit_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         finding_id:
           $ref: "#/components/schemas/GID"
           description: Finding ID
@@ -3955,8 +4445,14 @@ components:
     ListFindingAuditsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - finding_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         finding_id:
           $ref: "#/components/schemas/GID"
           description: Finding ID
@@ -4095,8 +4591,14 @@ components:
     ListObligationsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -4125,8 +4627,14 @@ components:
     GetObligationInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Obligation ID
@@ -4142,11 +4650,17 @@ components:
     AddObligationInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - owner_id
         - status
         - type
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -4202,8 +4716,14 @@ components:
     UpdateObligationInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Obligation ID
@@ -4269,8 +4789,14 @@ components:
     DeleteObligationInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Obligation ID
@@ -4383,8 +4909,14 @@ components:
     ListBusinessFunctionsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -4422,8 +4954,14 @@ components:
     GetBusinessFunctionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Business function ID
@@ -4439,6 +4977,8 @@ components:
     AddBusinessFunctionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - classification
@@ -4446,6 +4986,10 @@ components:
         - rto_minutes
         - rpo_minutes
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -4495,8 +5039,14 @@ components:
     UpdateBusinessFunctionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Business function ID
@@ -4552,8 +5102,14 @@ components:
     DeleteBusinessFunctionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Business function ID
@@ -4726,8 +5282,14 @@ components:
     ListAiSystemsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -4770,8 +5332,14 @@ components:
     GetAiSystemInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: AI system ID
@@ -4787,11 +5355,17 @@ components:
     AddAiSystemInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - status
         - risk_classification
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -4863,8 +5437,14 @@ components:
     UpdateAiSystemInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: AI system ID
@@ -4952,8 +5532,14 @@ components:
     DeleteAiSystemInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: AI system ID
@@ -5154,8 +5740,14 @@ components:
     ListProcessingActivitiesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -5185,8 +5777,14 @@ components:
     GetProcessingActivityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Processing activity ID
@@ -5202,6 +5800,8 @@ components:
     AddProcessingActivityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - special_or_criminal_data
@@ -5211,6 +5811,10 @@ components:
         - transfer_impact_assessment_needed
         - role
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -5294,8 +5898,14 @@ components:
     UpdateProcessingActivityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Processing activity ID
@@ -5371,8 +5981,14 @@ components:
     DeleteProcessingActivityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Processing activity ID
@@ -5456,8 +6072,14 @@ components:
     ListDataProtectionImpactAssessmentsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
         order_by:
@@ -5482,8 +6104,14 @@ components:
     GetDataProtectionImpactAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -5498,8 +6126,14 @@ components:
     AddDataProtectionImpactAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - processing_activity_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         processing_activity_id:
           $ref: "#/components/schemas/GID"
         description:
@@ -5526,8 +6160,14 @@ components:
     UpdateDataProtectionImpactAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         description:
@@ -5556,8 +6196,14 @@ components:
     DeleteDataProtectionImpactAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -5631,8 +6277,14 @@ components:
     ListTransferImpactAssessmentsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
         order_by:
@@ -5657,8 +6309,14 @@ components:
     GetTransferImpactAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -5673,8 +6331,14 @@ components:
     AddTransferImpactAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - processing_activity_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         processing_activity_id:
           $ref: "#/components/schemas/GID"
         data_subjects:
@@ -5699,8 +6363,14 @@ components:
     UpdateTransferImpactAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         data_subjects:
@@ -5730,8 +6400,14 @@ components:
     DeleteTransferImpactAssessmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -5914,8 +6590,14 @@ components:
     GetAuditReportUrlInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Audit ID
@@ -5932,8 +6614,14 @@ components:
     DeleteAuditReportInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Audit ID
@@ -5949,8 +6637,14 @@ components:
     ListAuditsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -5980,8 +6674,14 @@ components:
     GetAuditInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Audit ID
@@ -5997,9 +6697,15 @@ components:
     AddAuditInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - framework_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -6040,8 +6746,14 @@ components:
     UpdateAuditInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Audit ID
@@ -6091,8 +6803,14 @@ components:
     DeleteAuditInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Audit ID
@@ -6184,8 +6902,14 @@ components:
     ListControlsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -6224,8 +6948,14 @@ components:
     GetControlInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6241,6 +6971,8 @@ components:
     AddControlInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - framework_id
         - section_title
@@ -6248,6 +6980,10 @@ components:
         - best_practice
         - maturity_level
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -6288,8 +7024,14 @@ components:
     UpdateControlInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6327,8 +7069,14 @@ components:
     DeleteControlInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6345,9 +7093,15 @@ components:
     LinkControlInput:
       type: object
       required:
+        - reason
+        - user_intent
         - control_id
         - resource_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         control_id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6361,9 +7115,15 @@ components:
     UnlinkControlInput:
       type: object
       required:
+        - reason
+        - user_intent
         - control_id
         - resource_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         control_id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6377,8 +7137,14 @@ components:
     ListControlObligationsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - control_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         control_id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6408,8 +7174,14 @@ components:
     ListControlMeasuresInput:
       type: object
       required:
+        - reason
+        - user_intent
         - control_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         control_id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6439,8 +7211,14 @@ components:
     ListControlDocumentsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - control_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         control_id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6470,8 +7248,14 @@ components:
     ListControlAuditsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - control_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         control_id:
           $ref: "#/components/schemas/GID"
           description: Control ID
@@ -6501,8 +7285,14 @@ components:
     ListRiskObligationsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_id:
           $ref: "#/components/schemas/GID"
           description: Risk ID
@@ -6532,8 +7322,14 @@ components:
     ListRiskMeasuresInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_id:
           $ref: "#/components/schemas/GID"
           description: Risk ID
@@ -6563,9 +7359,15 @@ components:
     LinkRiskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_id
         - resource_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_id:
           $ref: "#/components/schemas/GID"
           description: Risk ID
@@ -6579,9 +7381,15 @@ components:
     UnlinkRiskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_id
         - resource_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_id:
           $ref: "#/components/schemas/GID"
           description: Risk ID
@@ -6706,8 +7514,14 @@ components:
     ListTasksInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -6743,8 +7557,14 @@ components:
     GetTaskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Task ID
@@ -6760,9 +7580,15 @@ components:
     AddTaskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -6809,8 +7635,14 @@ components:
     UpdateTaskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Task ID
@@ -6882,9 +7714,15 @@ components:
     AssignTaskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
         - assigned_to_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Task ID
@@ -6903,8 +7741,14 @@ components:
     UnassignTaskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Task ID
@@ -6920,8 +7764,14 @@ components:
     DeleteTaskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Task ID
@@ -7317,8 +8167,14 @@ components:
     ListDocumentsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -7377,8 +8233,14 @@ components:
     GetDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Document ID
@@ -7394,12 +8256,18 @@ components:
     AddDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - title
         - content
         - classification
         - document_type
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -7436,8 +8304,14 @@ components:
     UpdateDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Document ID
@@ -7472,8 +8346,14 @@ components:
     DeleteDocumentDraftInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Document ID
@@ -7489,8 +8369,14 @@ components:
     ArchiveDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Document ID
@@ -7506,8 +8392,14 @@ components:
     UnarchiveDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Document ID
@@ -7523,8 +8415,14 @@ components:
     ListDocumentVersionsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_id:
           $ref: "#/components/schemas/GID"
           description: Document ID
@@ -7563,8 +8461,14 @@ components:
     GetDocumentVersionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Document version ID
@@ -7581,10 +8485,16 @@ components:
     PublishDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_id
         - minor
         - changelog
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_id:
           $ref: "#/components/schemas/GID"
           description: Document ID
@@ -7613,8 +8523,14 @@ components:
     DeleteDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_id:
           $ref: "#/components/schemas/GID"
           description: Document ID
@@ -7631,8 +8547,14 @@ components:
     ListDocumentVersionSignaturesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_version_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_version_id:
           $ref: "#/components/schemas/GID"
           description: Document version ID
@@ -7678,8 +8600,14 @@ components:
     GetDocumentVersionSignatureInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Document version signature ID
@@ -7695,9 +8623,15 @@ components:
     RequestDocumentVersionSignatureInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_version_id
         - signatory_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_version_id:
           $ref: "#/components/schemas/GID"
           description: Document version ID
@@ -7716,8 +8650,14 @@ components:
     CancelSignatureRequestInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_version_signature_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_version_signature_id:
           $ref: "#/components/schemas/GID"
           description: Document version signature ID
@@ -7734,8 +8674,14 @@ components:
     VoidDocumentVersionApprovalInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_version_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_version_id:
           $ref: "#/components/schemas/GID"
           description: Document version ID
@@ -7751,8 +8697,14 @@ components:
     ApproveDocumentVersionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_version_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_version_id:
           $ref: "#/components/schemas/GID"
           description: Document version ID
@@ -7771,8 +8723,14 @@ components:
     RejectDocumentVersionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_version_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_version_id:
           $ref: "#/components/schemas/GID"
           description: Document version ID
@@ -7791,8 +8749,14 @@ components:
     SignDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_version_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_version_id:
           $ref: "#/components/schemas/GID"
           description: Document version ID
@@ -7808,8 +8772,14 @@ components:
     ListDocumentVersionApprovalQuorumsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - document_version_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         document_version_id:
           $ref: "#/components/schemas/GID"
           description: Document version ID
@@ -7839,8 +8809,14 @@ components:
     GetDocumentVersionApprovalQuorumInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Approval quorum ID
@@ -7856,8 +8832,14 @@ components:
     ListDocumentVersionApprovalDecisionsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - quorum_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         quorum_id:
           $ref: "#/components/schemas/GID"
           description: Approval quorum ID
@@ -7895,8 +8877,14 @@ components:
     GetDocumentVersionApprovalDecisionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Approval decision ID
@@ -8035,8 +9023,14 @@ components:
     ListWebhookSubscriptionsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8069,8 +9063,14 @@ components:
     GetWebhookSubscriptionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Webhook subscription ID
@@ -8086,10 +9086,16 @@ components:
     CreateWebhookSubscriptionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - endpoint_url
         - selected_events
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8113,8 +9119,14 @@ components:
     UpdateWebhookSubscriptionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Webhook subscription ID
@@ -8138,8 +9150,14 @@ components:
     DeleteWebhookSubscriptionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Webhook subscription ID
@@ -8156,8 +9174,14 @@ components:
     ListWebhookEventsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - webhook_subscription_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         webhook_subscription_id:
           $ref: "#/components/schemas/GID"
           description: Webhook subscription ID
@@ -8242,8 +9266,14 @@ components:
     ListStatementsOfApplicabilityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8272,8 +9302,14 @@ components:
     GetStatementOfApplicabilityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Statement of applicability ID
@@ -8289,9 +9325,15 @@ components:
     AddStatementOfApplicabilityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8310,8 +9352,14 @@ components:
     UpdateStatementOfApplicabilityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Statement of applicability ID
@@ -8330,8 +9378,14 @@ components:
     DeleteStatementOfApplicabilityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Statement of applicability ID
@@ -8349,9 +9403,15 @@ components:
     PublishDataListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8380,9 +9440,15 @@ components:
     PublishAssetListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8411,9 +9477,15 @@ components:
     PublishFindingListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8442,9 +9514,15 @@ components:
     PublishObligationListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8473,9 +9551,15 @@ components:
     PublishBusinessFunctionListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8504,9 +9588,15 @@ components:
     PublishAiSystemListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8535,9 +9625,15 @@ components:
     PublishProcessingActivityListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8566,9 +9662,15 @@ components:
     PublishDataProtectionImpactAssessmentListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8597,9 +9699,15 @@ components:
     PublishTransferImpactAssessmentListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8628,9 +9736,15 @@ components:
     PublishThirdPartyListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8659,9 +9773,15 @@ components:
     PublishRiskListInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -8690,9 +9810,15 @@ components:
     PublishStatementOfApplicabilityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
         - minor
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Statement of applicability ID
@@ -8781,8 +9907,14 @@ components:
     ListApplicabilityStatementsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - statement_of_applicability_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         statement_of_applicability_id:
           $ref: "#/components/schemas/GID"
           description: Statement of applicability ID
@@ -8812,8 +9944,14 @@ components:
     GetApplicabilityStatementInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Applicability statement ID
@@ -8829,10 +9967,16 @@ components:
     AddApplicabilityStatementInput:
       type: object
       required:
+        - reason
+        - user_intent
         - statement_of_applicability_id
         - control_id
         - applicability
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         statement_of_applicability_id:
           $ref: "#/components/schemas/GID"
           description: Statement of applicability ID
@@ -8859,9 +10003,15 @@ components:
     UpdateApplicabilityStatementInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
         - applicability
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Applicability statement ID
@@ -8885,8 +10035,14 @@ components:
     DeleteApplicabilityStatementInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Applicability statement ID
@@ -9217,8 +10373,14 @@ components:
     ListAccessReviewCampaignsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -9247,7 +10409,14 @@ components:
 
     ListAccessEntriesInput:
       type: object
+      required:
+        - reason
+        - user_intent
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID. Required when access_review_campaign_source_id is omitted.
@@ -9304,8 +10473,14 @@ components:
     GetAccessReviewStatisticsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - campaign_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID
@@ -9321,9 +10496,15 @@ components:
     RecordAccessReviewEntryDecisionMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - access_review_entry_id
         - decision
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         access_review_entry_id:
           $ref: "#/components/schemas/GID"
           description: Access entry ID
@@ -9345,8 +10526,14 @@ components:
     RecordAccessReviewEntryDecisionsMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - decisions
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         decisions:
           type: array
           items:
@@ -9378,9 +10565,15 @@ components:
     FlagAccessReviewEntryMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - access_review_entry_id
         - flags
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         access_review_entry_id:
           $ref: "#/components/schemas/GID"
           description: Access entry ID
@@ -9406,8 +10599,14 @@ components:
     CloseAccessReviewCampaignMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - campaign_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID
@@ -9479,8 +10678,14 @@ components:
     ListAccessReviewSourcesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -9510,9 +10715,15 @@ components:
     CreateAccessReviewSourceMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -9537,8 +10748,14 @@ components:
     UpdateAccessReviewSourceMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - access_review_source_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         access_review_source_id:
           $ref: "#/components/schemas/GID"
           description: Access source ID
@@ -9569,8 +10786,14 @@ components:
     DeleteAccessReviewSourceMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - access_review_source_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         access_review_source_id:
           $ref: "#/components/schemas/GID"
           description: Access source ID
@@ -9587,9 +10810,15 @@ components:
     CreateAccessReviewCampaignMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -9616,8 +10845,14 @@ components:
     UpdateAccessReviewCampaignMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - campaign_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID
@@ -9638,8 +10873,14 @@ components:
     DeleteAccessReviewCampaignMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - campaign_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID
@@ -9656,8 +10897,14 @@ components:
     StartAccessReviewCampaignMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - campaign_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID
@@ -9673,8 +10920,14 @@ components:
     CancelAccessReviewCampaignMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - campaign_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID
@@ -9690,9 +10943,15 @@ components:
     AddAccessReviewCampaignSourceMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - campaign_id
         - access_review_source_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID
@@ -9711,9 +10970,15 @@ components:
     RemoveAccessReviewCampaignSourceMCPInput:
       type: object
       required:
+        - reason
+        - user_intent
         - campaign_id
         - access_review_source_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         campaign_id:
           $ref: "#/components/schemas/GID"
           description: Campaign ID
@@ -9756,8 +11021,14 @@ components:
     GetOrganizationContextInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -9773,8 +11044,14 @@ components:
     UpdateOrganizationContextInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -9805,8 +11082,14 @@ components:
     GetAuditLogEntryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Audit log entry ID
@@ -9839,8 +11122,14 @@ components:
     ListAuditLogEntriesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -9885,10 +11174,16 @@ components:
     RequestAuditLogExportInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - from_time
         - to_time
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -9915,10 +11210,16 @@ components:
     RequestSCIMEventExportInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - from_time
         - to_time
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -10074,8 +11375,14 @@ components:
     ListRightsRequestsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -10105,8 +11412,14 @@ components:
     GetRightsRequestInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Rights request ID
@@ -10122,11 +11435,17 @@ components:
     AddRightsRequestInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - request_type
         - request_state
         - data_subject
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -10166,8 +11485,14 @@ components:
     UpdateRightsRequestInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Rights request ID
@@ -10211,8 +11536,14 @@ components:
     DeleteRightsRequestInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Rights request ID
@@ -10566,8 +11897,14 @@ components:
     ListCompliancePortalsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -10597,9 +11934,15 @@ components:
     CreateCompliancePortalInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - entity_name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -10618,8 +11961,14 @@ components:
     GetCompliancePortalInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10635,8 +11984,14 @@ components:
     UpdateCompliancePortalInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10700,8 +12055,14 @@ components:
     DeleteCompliancePortalInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10718,10 +12079,16 @@ components:
     UpdateCompliancePortalDocumentVisibilityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
         - document_id
         - compliance_portal_visibility
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10744,8 +12111,14 @@ components:
     DeleteCompliancePortalDocumentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal document ID
@@ -10762,10 +12135,16 @@ components:
     UpdateCompliancePortalAuditVisibilityInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
         - audit_id
         - compliance_portal_visibility
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10788,8 +12167,14 @@ components:
     DeleteCompliancePortalAuditInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal audit ID
@@ -10806,10 +12191,16 @@ components:
     UpdateCompliancePortalThirdPartyPublishedInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
         - third_party_id
         - published
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10832,8 +12223,14 @@ components:
     DeleteCompliancePortalThirdPartyInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal third party ID
@@ -10850,8 +12247,14 @@ components:
     ListCompliancePortalDocumentsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10881,8 +12284,14 @@ components:
     ListCompliancePortalAuditsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10912,8 +12321,14 @@ components:
     ListCompliancePortalThirdPartiesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10943,8 +12358,14 @@ components:
     ListCompliancePortalReferencesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -10974,9 +12395,15 @@ components:
     AddCompliancePortalReferenceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -11001,8 +12428,14 @@ components:
     UpdateCompliancePortalReferenceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal reference ID
@@ -11042,8 +12475,14 @@ components:
     DeleteCompliancePortalReferenceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal reference ID
@@ -11182,8 +12621,14 @@ components:
     ListCommitmentGroupsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -11213,10 +12658,16 @@ components:
     AddCommitmentGroupInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
         - title
         - description
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -11238,8 +12689,14 @@ components:
     UpdateCommitmentGroupInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Commitment group ID
@@ -11273,8 +12730,14 @@ components:
     DeleteCommitmentGroupInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Commitment group ID
@@ -11291,8 +12754,14 @@ components:
     ListCommitmentsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - group_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         group_id:
           $ref: "#/components/schemas/GID"
           description: Commitment group ID
@@ -11322,12 +12791,18 @@ components:
     AddCommitmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - group_id
         - icon
         - eyebrow
         - title
         - description
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         group_id:
           $ref: "#/components/schemas/GID"
           description: Commitment group ID
@@ -11355,8 +12830,14 @@ components:
     UpdateCommitmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Commitment ID
@@ -11402,8 +12883,14 @@ components:
     DeleteCommitmentInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Commitment ID
@@ -11433,9 +12920,15 @@ components:
     SetResourceAliasInput:
       type: object
       required:
+        - reason
+        - user_intent
         - resource_id
         - alias
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         resource_id:
           $ref: "#/components/schemas/GID"
           description: ID of the resource to alias
@@ -11454,8 +12947,14 @@ components:
     RemoveResourceAliasInput:
       type: object
       required:
+        - reason
+        - user_intent
         - resource_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         resource_id:
           $ref: "#/components/schemas/GID"
           description: ID of the resource whose alias to remove
@@ -11472,8 +12971,14 @@ components:
     ListCompliancePortalFilesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -11503,8 +13008,14 @@ components:
     DeleteCompliancePortalFileInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal file ID
@@ -11521,8 +13032,14 @@ components:
     ListComplianceCustomLinksInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -11552,10 +13069,16 @@ components:
     AddComplianceCustomLinkInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
         - name
         - url
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -11577,8 +13100,14 @@ components:
     UpdateComplianceCustomLinkInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Compliance custom link ID
@@ -11612,8 +13141,14 @@ components:
     DeleteComplianceCustomLinkInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Compliance custom link ID
@@ -11630,9 +13165,15 @@ components:
     CreateCustomDomainInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
         - domain
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -11651,8 +13192,14 @@ components:
     DeleteCustomDomainInput:
       type: object
       required:
+        - reason
+        - user_intent
         - compliance_portal_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
           description: Compliance portal ID
@@ -12073,8 +13620,14 @@ components:
     ListCookieBannersInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -12100,8 +13653,14 @@ components:
     GetCookieBannerInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Cookie banner ID
@@ -12117,12 +13676,18 @@ components:
     AddCookieBannerInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - origin
         - cookie_policy_url
         - consent_expiry_days
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -12153,8 +13718,14 @@ components:
     UpdateCookieBannerInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Cookie banner ID
@@ -12201,8 +13772,14 @@ components:
     DeleteCookieBannerInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Cookie banner ID
@@ -12218,8 +13795,14 @@ components:
     ActivateCookieBannerInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Cookie banner ID
@@ -12235,8 +13818,14 @@ components:
     DeactivateCookieBannerInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Cookie banner ID
@@ -12260,8 +13849,14 @@ components:
     ListCookieCategoriesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_banner_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_banner_id:
           $ref: "#/components/schemas/GID"
           description: Cookie banner ID
@@ -12291,8 +13886,14 @@ components:
     GetCookieCategoryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -12307,12 +13908,18 @@ components:
     AddCookieCategoryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_banner_id
         - name
         - slug
         - description
         - rank
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_banner_id:
           $ref: "#/components/schemas/GID"
         name:
@@ -12335,8 +13942,14 @@ components:
     UpdateCookieCategoryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         name:
@@ -12366,8 +13979,14 @@ components:
     DeleteCookieCategoryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -12382,9 +14001,15 @@ components:
     ReorderCookieCategoryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
         - rank
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         rank:
@@ -12401,8 +14026,14 @@ components:
     ListTrackerPatternsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_category_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_category_id:
           $ref: "#/components/schemas/GID"
         size:
@@ -12425,8 +14056,14 @@ components:
     GetTrackerPatternInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -12441,6 +14078,8 @@ components:
     AddTrackerPatternInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_category_id
         - tracker_type
         - pattern
@@ -12448,6 +14087,10 @@ components:
         - display_name
         - description
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_category_id:
           $ref: "#/components/schemas/GID"
         tracker_type:
@@ -12476,8 +14119,14 @@ components:
     UpdateTrackerPatternInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         max_age_seconds:
@@ -12507,8 +14156,14 @@ components:
     DeleteTrackerPatternInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -12523,9 +14178,15 @@ components:
     MoveTrackerPatternToCategoryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - tracker_pattern_id
         - target_cookie_category_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         tracker_pattern_id:
           $ref: "#/components/schemas/GID"
         target_cookie_category_id:
@@ -12542,8 +14203,14 @@ components:
     ListTrackerResourcesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_category_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_category_id:
           $ref: "#/components/schemas/GID"
         size:
@@ -12566,8 +14233,14 @@ components:
     GetTrackerResourceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -12582,12 +14255,18 @@ components:
     AddTrackerResourceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_category_id
         - resource_type
         - origin
         - path
         - display_name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_category_id:
           $ref: "#/components/schemas/GID"
         resource_type:
@@ -12613,8 +14292,14 @@ components:
     UpdateTrackerResourceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         display_name:
@@ -12644,8 +14329,14 @@ components:
     DeleteTrackerResourceInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -12660,9 +14351,15 @@ components:
     MoveTrackerResourceToCategoryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - tracker_resource_id
         - target_cookie_category_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         tracker_resource_id:
           $ref: "#/components/schemas/GID"
         target_cookie_category_id:
@@ -12679,8 +14376,14 @@ components:
     PublishCookieBannerVersionInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_banner_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_banner_id:
           $ref: "#/components/schemas/GID"
 
@@ -12695,8 +14398,14 @@ components:
     RegenerateCookieBannerTrackerPolicyInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_banner_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_banner_id:
           $ref: "#/components/schemas/GID"
 
@@ -12711,8 +14420,14 @@ components:
     ListCookieBannerVersionsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_banner_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_banner_id:
           $ref: "#/components/schemas/GID"
         size:
@@ -12735,10 +14450,16 @@ components:
     UpsertCookieBannerTranslationInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_banner_id
         - language
         - translations
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_banner_id:
           $ref: "#/components/schemas/GID"
         language:
@@ -12758,8 +14479,14 @@ components:
     ListCookieConsentRecordsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - cookie_banner_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         cookie_banner_id:
           $ref: "#/components/schemas/GID"
         size:
@@ -12792,8 +14519,14 @@ components:
     GetCookieConsentRecordInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -12981,8 +14714,14 @@ components:
     GetSCIMConfigurationInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -12998,8 +14737,14 @@ components:
     CreateSCIMConfigurationInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -13025,9 +14770,15 @@ components:
     DeleteSCIMConfigurationInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - scim_configuration_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -13047,9 +14798,15 @@ components:
     RegenerateSCIMTokenInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - scim_configuration_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -13072,8 +14829,14 @@ components:
     GetSCIMBridgeInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: SCIM bridge ID
@@ -13089,10 +14852,16 @@ components:
     UpdateSCIMBridgeInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - scim_bridge_id
         - excluded_user_names
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -13116,8 +14885,14 @@ components:
     ListSCIMEventsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - scim_configuration_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         scim_configuration_id:
           $ref: "#/components/schemas/GID"
           description: SCIM configuration ID
@@ -13489,8 +15264,14 @@ components:
     ListRiskAnalysesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -13520,8 +15301,14 @@ components:
     GetRiskAnalysisInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis ID
@@ -13537,10 +15324,16 @@ components:
     AddRiskAnalysisInput:
       type: object
       required:
+        - reason
+        - user_intent
         - organization_id
         - name
         - matrix_size
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         organization_id:
           $ref: "#/components/schemas/GID"
           description: Organization ID
@@ -13568,8 +15361,14 @@ components:
     UpdateRiskAnalysisInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis ID
@@ -13598,8 +15397,14 @@ components:
     DeleteRiskAnalysisInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis ID
@@ -13616,8 +15421,14 @@ components:
     ListRiskAnalysisDiagramsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis ID
@@ -13647,8 +15458,14 @@ components:
     GetRiskAnalysisDiagramInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -13664,8 +15481,14 @@ components:
     GetRiskAnalysisDiagramMermaidChartInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -13682,9 +15505,15 @@ components:
     AddRiskAnalysisDiagramInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis ID
@@ -13703,8 +15532,14 @@ components:
     UpdateRiskAnalysisDiagramInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -13723,8 +15558,14 @@ components:
     DeleteRiskAnalysisDiagramInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -13741,8 +15582,14 @@ components:
     ListRiskAnalysisNodesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -13772,8 +15619,14 @@ components:
     GetRiskAnalysisNodeInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis node ID
@@ -13789,10 +15642,16 @@ components:
     AddRiskAnalysisNodeInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
         - node_type
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -13817,8 +15676,14 @@ components:
     UpdateRiskAnalysisNodeInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis node ID
@@ -13843,8 +15708,14 @@ components:
     DeleteRiskAnalysisNodeInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis node ID
@@ -13861,8 +15732,14 @@ components:
     ListRiskAnalysisBoundariesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -13892,8 +15769,14 @@ components:
     GetRiskAnalysisBoundaryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis boundary ID
@@ -13909,9 +15792,15 @@ components:
     AddRiskAnalysisBoundaryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -13933,8 +15822,14 @@ components:
     UpdateRiskAnalysisBoundaryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis boundary ID
@@ -13956,8 +15851,14 @@ components:
     DeleteRiskAnalysisBoundaryInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis boundary ID
@@ -13974,8 +15875,14 @@ components:
     ListRiskAnalysisProcessesInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -14005,8 +15912,14 @@ components:
     GetRiskAnalysisProcessInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis process ID
@@ -14022,11 +15935,17 @@ components:
     AddRiskAnalysisProcessInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
         - source_node_id
         - target_node_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -14051,8 +15970,14 @@ components:
     UpdateRiskAnalysisProcessInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis process ID
@@ -14077,8 +16002,14 @@ components:
     DeleteRiskAnalysisProcessInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis process ID
@@ -14095,8 +16026,14 @@ components:
     ListRiskAnalysisThreatsInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -14126,8 +16063,14 @@ components:
     GetRiskAnalysisThreatInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis threat ID
@@ -14143,11 +16086,17 @@ components:
     AddRiskAnalysisThreatInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
         - process_id
         - name
         - category
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -14172,8 +16121,14 @@ components:
     UpdateRiskAnalysisThreatInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis threat ID
@@ -14198,8 +16153,14 @@ components:
     DeleteRiskAnalysisThreatInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis threat ID
@@ -14216,8 +16177,14 @@ components:
     ListRiskAnalysisScenariosInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -14247,8 +16214,14 @@ components:
     GetRiskAnalysisScenarioInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis scenario ID
@@ -14264,9 +16237,15 @@ components:
     AddRiskAnalysisScenarioInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_diagram_id
         - name
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_diagram_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis diagram ID
@@ -14288,8 +16267,14 @@ components:
     UpdateRiskAnalysisScenarioInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis scenario ID
@@ -14312,8 +16297,14 @@ components:
     DeleteRiskAnalysisScenarioInput:
       type: object
       required:
+        - reason
+        - user_intent
         - id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis scenario ID
@@ -14330,9 +16321,15 @@ components:
     LinkRiskAnalysisScenarioThreatInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_scenario_id
         - threat_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_scenario_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis scenario ID
@@ -14346,9 +16343,15 @@ components:
     UnlinkRiskAnalysisScenarioThreatInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_scenario_id
         - threat_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_scenario_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis scenario ID
@@ -14362,9 +16365,15 @@ components:
     LinkRiskAnalysisScenarioRiskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_scenario_id
         - risk_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_scenario_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis scenario ID
@@ -14378,9 +16387,15 @@ components:
     UnlinkRiskAnalysisScenarioRiskInput:
       type: object
       required:
+        - reason
+        - user_intent
         - risk_analysis_scenario_id
         - risk_id
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         risk_analysis_scenario_id:
           $ref: "#/components/schemas/GID"
           description: Risk analysis scenario ID
@@ -14496,8 +16511,12 @@ components:
 
     GetMailingListInput:
       type: object
-      required: [compliance_portal_id]
+      required: [reason, user_intent, compliance_portal_id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
 
@@ -14511,8 +16530,12 @@ components:
 
     UpdateMailingListInput:
       type: object
-      required: [id]
+      required: [reason, user_intent, id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         reply_to:
@@ -14529,8 +16552,12 @@ components:
 
     ListMailingListSubscribersInput:
       type: object
-      required: [mailing_list_id]
+      required: [reason, user_intent, mailing_list_id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         mailing_list_id:
           $ref: "#/components/schemas/GID"
         order_by:
@@ -14553,8 +16580,12 @@ components:
 
     AddMailingListSubscriberInput:
       type: object
-      required: [mailing_list_id, full_name, email]
+      required: [reason, user_intent, mailing_list_id, full_name, email]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         mailing_list_id:
           $ref: "#/components/schemas/GID"
         full_name:
@@ -14574,8 +16605,12 @@ components:
 
     DeleteMailingListSubscriberInput:
       type: object
-      required: [id]
+      required: [reason, user_intent, id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -14588,8 +16623,12 @@ components:
 
     ListMailingListUpdatesInput:
       type: object
-      required: [mailing_list_id]
+      required: [reason, user_intent, mailing_list_id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         mailing_list_id:
           $ref: "#/components/schemas/GID"
         order_by:
@@ -14612,8 +16651,12 @@ components:
 
     AddMailingListUpdateInput:
       type: object
-      required: [mailing_list_id, title, body]
+      required: [reason, user_intent, mailing_list_id, title, body]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         mailing_list_id:
           $ref: "#/components/schemas/GID"
         title:
@@ -14630,8 +16673,12 @@ components:
 
     UpdateMailingListUpdateInput:
       type: object
-      required: [id]
+      required: [reason, user_intent, id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         title:
@@ -14648,8 +16695,12 @@ components:
 
     SendMailingListUpdateInput:
       type: object
-      required: [id]
+      required: [reason, user_intent, id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -14662,8 +16713,12 @@ components:
 
     DeleteMailingListUpdateInput:
       type: object
-      required: [id]
+      required: [reason, user_intent, id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -14717,8 +16772,12 @@ components:
 
     ListDetectedTrackersInput:
       type: object
-      required: [tracker_pattern_id]
+      required: [reason, user_intent, tracker_pattern_id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         tracker_pattern_id:
           $ref: "#/components/schemas/GID"
         order_by:
@@ -14784,8 +16843,12 @@ components:
 
     ListCompliancePortalFrameworksInput:
       type: object
-      required: [compliance_portal_id]
+      required: [reason, user_intent, compliance_portal_id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
         order_by:
@@ -14808,8 +16871,12 @@ components:
 
     AddCompliancePortalFrameworkInput:
       type: object
-      required: [compliance_portal_id, framework_id]
+      required: [reason, user_intent, compliance_portal_id, framework_id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         compliance_portal_id:
           $ref: "#/components/schemas/GID"
         framework_id:
@@ -14824,8 +16891,12 @@ components:
 
     UpdateCompliancePortalFrameworkInput:
       type: object
-      required: [id, rank]
+      required: [reason, user_intent, id, rank]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
         rank:
@@ -14840,8 +16911,12 @@ components:
 
     DeleteCompliancePortalFrameworkInput:
       type: object
-      required: [id]
+      required: [reason, user_intent, id]
       properties:
+        reason:
+          $ref: "#/components/schemas/FlowlinesToolCallReason"
+        user_intent:
+          $ref: "#/components/schemas/FlowlinesUserIntent"
         id:
           $ref: "#/components/schemas/GID"
 
@@ -18945,3 +21020,15 @@ tools:
       $ref: "#/components/schemas/DeleteCompliancePortalFrameworkInput"
     outputSchema:
       $ref: "#/components/schemas/DeleteCompliancePortalFrameworkOutput"
+  - name: report_outcome
+    title: Report Outcome
+    description: REQUIRED final call in every conversation. Report the outcome immediately before the final answer, including after read-only, partial, failed, or blocked work.
+    hints:
+      readonly: true
+      destructive: false
+      idempotent: true
+      openWorld: false
+    inputSchema:
+      $ref: "#/components/schemas/ReportOutcomeInput"
+    outputSchema:
+      $ref: "#/components/schemas/ReportOutcomeOutput"

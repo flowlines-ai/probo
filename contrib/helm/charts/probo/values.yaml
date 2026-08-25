@@ -189,7 +189,7 @@ probo:
   # OpenTelemetry tracing configuration
   tracing:
     enabled: false
-    # OTLP gRPC endpoint (e.g., tempo:4317)
+    # OTLP HTTP endpoint (e.g., otel-collector:4318)
     addr: ""
     maxBatchSize: 512
     batchTimeout: 5

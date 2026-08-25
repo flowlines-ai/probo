@@ -329,7 +329,8 @@ probo:
   # OpenTelemetry tracing (optional)
   tracing:
     enabled: true
-    addr: "tempo.monitoring:4317"
+    # Route through an OTLP HTTP collector; the collector can export to Flowlines.
+    addr: "otel-collector.monitoring:4318"
     maxBatchSize: 1000
     batchTimeout: 10
     exportTimeout: 30

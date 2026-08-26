@@ -958,6 +958,7 @@ func (impl *Implm) Run(
 			CustomDomainCname:        impl.cfg.CustomDomains.CnameTarget,
 			TokenSecret:              impl.cfg.Auth.Cookie.Secret,
 			Logger:                   l.Named("http.server"),
+			TracerProvider:           tp,
 			Cookie:                   authCookie,
 			IdentityFederationIssuer: identityFederationIssuer,
 		},

@@ -5,6 +5,12 @@ this file.
 
 ## Unreleased
 
+### Changed
+
+- Probo MCP workflows now provide the required per-call `reason` and stable
+  `user_intent` analytics fields, and call `report_outcome` exactly once when a
+  workflow finishes, including partial, failed, and blocked runs.
+
 ## [0.3.1] - 2026-08-24
 
 ### Fixed

@@ -28,16 +28,23 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
+)
+
+const (
+	mcpTestReason     = "Exercise the requested MCP tool in an end-to-end test"
+	mcpTestUserIntent = "Verify the MCP tool behaves correctly in the Probo end-to-end test suite."
 )
 
 // MCPClient wraps an authenticated MCP session for e2e testing.
 type MCPClient struct {
-	t          require.TestingT
-	baseURL    string
-	apiToken   string
-	sessionID  string
-	httpClient *http.Client
+	t                  require.TestingT
+	baseURL            string
+	apiToken           string
+	sessionID          string
+	analyticsSessionID string
+	httpClient         *http.Client
 }
 
 // CreateAPIKey creates a personal API key via the connect GraphQL API.
@@ -109,9 +116,10 @@ func NewMCPClient(t require.TestingT, owner *Client) *MCPClient {
 // It initializes an MCP session and stores the session ID.
 func NewMCPClientWithAccessToken(t require.TestingT, owner *Client, accessToken string) *MCPClient {
 	mc := &MCPClient{
-		t:        t,
-		baseURL:  owner.BaseURL() + "/api/mcp/v1",
-		apiToken: accessToken,
+		t:                  t,
+		baseURL:            owner.BaseURL() + "/api/mcp/v1",
+		apiToken:           accessToken,
+		analyticsSessionID: uuid.NewString(),
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
@@ -240,7 +248,10 @@ type MCPContent struct {
 func (mc *MCPClient) CallTool(toolName string, args map[string]any) *MCPToolResult {
 	result, err := mc.doRequest("tools/call", map[string]any{
 		"name":      toolName,
-		"arguments": args,
+		"arguments": withMCPObservabilityArguments(args),
+		"_meta": map[string]any{
+			"session.id": mc.analyticsSessionID,
+		},
 	})
 	require.NoError(mc.t, err, "MCP tools/call %s failed", toolName)
 
@@ -250,6 +261,23 @@ func (mc *MCPClient) CallTool(toolName string, args map[string]any) *MCPToolResu
 	require.NoError(mc.t, err, "cannot unmarshal tool result for %s", toolName)
 
 	return &toolResult
+}
+
+func withMCPObservabilityArguments(args map[string]any) map[string]any {
+	arguments := make(map[string]any, len(args)+2)
+	for key, value := range args {
+		arguments[key] = value
+	}
+
+	if _, ok := arguments["reason"]; !ok {
+		arguments["reason"] = mcpTestReason
+	}
+
+	if _, ok := arguments["user_intent"]; !ok {
+		arguments["user_intent"] = mcpTestUserIntent
+	}
+
+	return arguments
 }
 
 // CallToolExpectToolError invokes an MCP tool and expects a tool-level error

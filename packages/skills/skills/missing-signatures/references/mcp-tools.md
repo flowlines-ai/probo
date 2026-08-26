@@ -1,7 +1,9 @@
 # Missing signatures MCP tools
 
 All tools are on a Probo MCP server (`probo-us`, `probo-eu`, or a self-hosted
-server configured in the agent). Read each tool schema before calling.
+server configured in the agent). Read each tool schema before calling. Every
+call requires `reason` and `user_intent` in addition to the business inputs
+listed below.
 
 ## Organization scope
 

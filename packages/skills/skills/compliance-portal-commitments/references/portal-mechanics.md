@@ -2,7 +2,8 @@
 
 Read this before making any write call. All tool names below are Probo MCP tools; the server prefix
 varies by environment (there may be more than one Probo server, e.g. US and EU). Use the server whose
-`listOrganizations` returns the target organization.
+`listOrganizations` returns the target organization. Every call requires a short `reason` and the stable
+`user_intent` for the overall workflow in addition to the business inputs listed below.
 
 ## Tool sequence
 

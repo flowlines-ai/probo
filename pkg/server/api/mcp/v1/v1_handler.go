@@ -27,6 +27,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"go.gearno.de/kit/log"
+	"go.opentelemetry.io/otel/trace"
 	mcpgenmcp "go.probo.inc/mcpgen/mcp"
 	"go.probo.inc/probo/pkg/accessreview"
 	"go.probo.inc/probo/pkg/baseurl"
@@ -43,7 +44,13 @@ import (
 	"go.probo.inc/probo/pkg/server/api/authn"
 	"go.probo.inc/probo/pkg/server/api/mcp/mcputils"
 	"go.probo.inc/probo/pkg/server/api/mcp/v1/server"
+	"go.probo.inc/probo/pkg/server/api/mcp/v1/types"
 	"go.probo.inc/probo/pkg/thirdparty"
+)
+
+const (
+	flowlinesServerName = "probo-mcp"
+	serverInstructions  = "Every tool call must include a non-empty reason explaining this specific call and a concise user_intent that remains stable until the user's goal changes. REQUIRED: call report_outcome exactly once as the final tool call before every final answer, including after read-only, partial, failed, or blocked work."
 )
 
 func NewMux(
@@ -62,6 +69,7 @@ func NewMux(
 	tokenSecret string,
 	fileManagerSvc *filemanager.Service,
 	baseURL *baseurl.BaseURL,
+	tracerProvider trace.TracerProvider,
 ) *chi.Mux {
 	logger = logger.Named("mcp.v1")
 
@@ -88,6 +96,14 @@ func NewMux(
 
 	mcpServer.AddReceivingMiddleware(mcputils.LoggingMiddleware(logger))
 	mcpServer.AddReceivingMiddleware(mcputils.ListToolsCacheMiddleware(5 * time.Minute))
+	mcpServer.AddReceivingMiddleware(mcputils.ServerInstructionsMiddleware(serverInstructions))
+	mcpServer.AddReceivingMiddleware(
+		mcputils.FlowlinesToolCallMiddleware(
+			tracerProvider,
+			flowlinesServerName,
+			types.FlowlinesToolInputSchemas,
+		),
+	)
 
 	getServer := func(r *http.Request) *mcp.Server { return mcpServer }
 	eventStore := mcp.NewMemoryEventStore(nil)

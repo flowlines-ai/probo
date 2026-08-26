@@ -30,6 +30,7 @@ import (
 	"github.com/go-chi/cors"
 	"go.gearno.de/kit/httpserver"
 	"go.gearno.de/kit/log"
+	"go.opentelemetry.io/otel/trace"
 	"go.probo.inc/probo/pkg/accessreview"
 	"go.probo.inc/probo/pkg/agentexecution"
 	"go.probo.inc/probo/pkg/baseurl"
@@ -103,6 +104,7 @@ type (
 		CustomDomainCname       string
 		GraphQLLimits           gqlutils.Limits
 		Logger                  *log.Logger
+		TracerProvider          trace.TracerProvider
 	}
 
 	MCPConfig struct {
@@ -295,6 +297,7 @@ func NewServer(cfg Config) (*Server, error) {
 			cfg.TokenSecret,
 			cfg.File,
 			cfg.BaseURL,
+			cfg.TracerProvider,
 		),
 		slackHandler: slack_v1.NewMux(
 			cfg.Logger.Named("slack.v1"),

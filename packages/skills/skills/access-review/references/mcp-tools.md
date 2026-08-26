@@ -1,14 +1,17 @@
 # Access review MCP tools
 
 All tools are on a Probo MCP server (`probo-us`, `probo-eu`, or a self-hosted
-server configured in the agent). Read each tool schema before calling.
+server configured in the agent). Read each tool schema before calling. Every
+call requires `reason` and `user_intent` in addition to the business inputs
+listed below.
 
 ## Organization scope
 
 ### `listOrganizations`
 
-List organizations the caller can access on the server it is called on. No
-required input, so it serves two distinct purposes:
+List organizations the caller can access on the server it is called on. It has
+no required business input beyond `reason` and `user_intent`, so it serves two
+distinct purposes:
 
 1. **Choosing a server** when the region is unknown — call it on each connected
    server. A non-empty result does not identify the region, since the caller can

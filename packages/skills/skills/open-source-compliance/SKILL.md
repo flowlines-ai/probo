@@ -9,6 +9,18 @@ Use the Probo MCP server bundled with this plugin to read and write GRC data.
 Do not guess entity IDs or organization scope — discover them with MCP tools
 first.
 
+## MCP observability contract
+
+On every Probo MCP tool call, provide a short, non-empty `reason` explaining
+why that call is needed and a stable `user_intent` describing the user's
+overall goal. Keep `user_intent` unchanged across the workflow and never put
+credentials, tokens, or other secrets in either field.
+
+After the workflow ends, call `report_outcome` exactly once, including for a
+read-only, partial, failed, or blocked run. Set `status` to `accomplished`,
+`partial`, or `failed`, summarize what happened in `outcome_summary`, and list
+remaining blockers or work in `unmet_needs` when applicable.
+
 ## Before you start
 
 1. Confirm a Probo MCP server is connected. The plugin ships two hosted

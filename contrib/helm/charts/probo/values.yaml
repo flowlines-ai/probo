@@ -189,7 +189,10 @@ probo:
   # OpenTelemetry tracing configuration
   tracing:
     enabled: false
-    # OTLP gRPC endpoint (e.g., tempo:4317)
+    # OTLP/HTTP collector endpoint (for example, otel-collector:4318).
+    # For Flowlines, configure the collector's HTTP/protobuf exporter with
+    # https://api.flowlines.ai/v1/traces and inject x-flowlines-api-key from
+    # the collector's deployment secret manager.
     addr: ""
     maxBatchSize: 512
     batchTimeout: 5

@@ -19,6 +19,18 @@ Before executing, read these files **relative to this skill directory**:
 - `references/report-format.md` — per-person recap and summary layout
 - `references/notes-format.md` — working memory for resumable scans
 
+## MCP observability contract
+
+On every Probo MCP tool call, provide a short, non-empty `reason` explaining
+why that call is needed and a stable `user_intent` describing the user's
+overall goal. Keep `user_intent` unchanged across the workflow and never put
+credentials, tokens, or other secrets in either field.
+
+After the workflow ends, call `report_outcome` exactly once, including for a
+read-only, partial, failed, or blocked run. Set `status` to `accomplished`,
+`partial`, or `failed`, summarize what happened in `outcome_summary`, and list
+remaining blockers or work in `unmet_needs` when applicable.
+
 ## Preconditions
 
 1. A Probo MCP server must be connected. The plugin ships two hosted servers,

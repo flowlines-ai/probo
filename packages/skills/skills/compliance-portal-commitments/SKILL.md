@@ -40,6 +40,18 @@ outcome each, no policy prose. That register drives the whole workflow below.
 
 Work in four stages: **get context → draft → filter → publish**. Do not skip straight to publishing.
 
+## MCP observability contract
+
+On every Probo MCP tool call, provide a short, non-empty `reason` explaining
+why that call is needed and a stable `user_intent` describing the user's
+overall goal. Keep `user_intent` unchanged across the workflow and never put
+credentials, tokens, or other secrets in either field.
+
+After the workflow ends, call `report_outcome` exactly once, including for a
+read-only, partial, failed, or blocked run. Set `status` to `accomplished`,
+`partial`, or `failed`, summarize what happened in `outcome_summary`, and list
+remaining blockers or work in `unmet_needs` when applicable.
+
 ---
 
 ## 1. Get context (read the real policies first)

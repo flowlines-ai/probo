@@ -19,6 +19,7 @@
 // SOFTWARE.
 
 //go:generate go run go.probo.inc/mcpgen generate
+//go:generate go run ./internal/flowlinesgen
 
 package mcp_v1
 

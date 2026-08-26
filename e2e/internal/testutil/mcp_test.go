@@ -108,3 +108,19 @@ func TestCollectSSEDataPayloads(t *testing.T) {
 	assert.Equal(t, "line-one\nline-two", string(payloads[0]))
 	assert.Equal(t, "second-event", string(payloads[1]))
 }
+
+func TestWithMCPObservabilityArguments(t *testing.T) {
+	t.Parallel()
+
+	original := map[string]any{
+		"organization_id": "org_123",
+		"reason":          "Preserve this reason",
+	}
+
+	arguments := withMCPObservabilityArguments(original)
+
+	assert.Equal(t, "org_123", arguments["organization_id"])
+	assert.Equal(t, "Preserve this reason", arguments["reason"])
+	assert.Equal(t, mcpTestUserIntent, arguments["user_intent"])
+	assert.NotContains(t, original, "user_intent")
+}

@@ -27,6 +27,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"go.gearno.de/kit/httpserver"
 	"go.gearno.de/kit/log"
+	"go.opentelemetry.io/otel/trace"
 	"go.probo.inc/probo/apps/console"
 	"go.probo.inc/probo/pkg/accessreview"
 	"go.probo.inc/probo/pkg/agentexecution"
@@ -98,6 +99,7 @@ type Config struct {
 	CustomDomainCname       string
 	GraphQLLimits           gqlutils.Limits
 	Logger                  *log.Logger
+	TracerProvider          trace.TracerProvider
 
 	// IdentityFederationIssuer serves the outbound OIDC documents. It is nil when the
 	// identity federation issuer is disabled, in which case no /federation route exists.
@@ -154,6 +156,7 @@ func NewServer(cfg Config) (*Server, error) {
 		CustomDomainCname:       cfg.CustomDomainCname,
 		GraphQLLimits:           cfg.GraphQLLimits,
 		Logger:                  cfg.Logger.Named("api"),
+		TracerProvider:          cfg.TracerProvider,
 	}
 
 	apiServer, err := api.NewServer(apiCfg)

@@ -17,6 +17,9 @@ spec:
     metadata:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- if .Values.probo.tracing.flowlines.enabled }}
+        checksum/flowlines-collector-config: {{ include (print $.Template.BasePath "/flowlines-otel-collector-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -46,10 +49,14 @@ spec:
             # Observability - Metrics
             - name: PROBOD_METRICS_ADDR
               value: "0.0.0.0:{{ .Values.probo.metrics.port }}"
-            {{- if .Values.probo.tracing.enabled }}
+            {{- if or .Values.probo.tracing.enabled .Values.probo.tracing.flowlines.enabled }}
             # Observability - Tracing
             - name: PROBOD_TRACING_ADDR
+            {{- if .Values.probo.tracing.flowlines.enabled }}
+              value: "127.0.0.1:4318"
+            {{- else }}
               value: {{ .Values.probo.tracing.addr | quote }}
+            {{- end }}
             - name: PROBOD_TRACING_MAX_BATCH_SIZE
               value: {{ .Values.probo.tracing.maxBatchSize | quote }}
             - name: PROBOD_TRACING_BATCH_TIMEOUT
@@ -642,6 +649,31 @@ spec:
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
+        {{- if .Values.probo.tracing.flowlines.enabled }}
+        - name: flowlines-otel-collector
+          image: "{{ .Values.probo.tracing.flowlines.collector.image.repository }}:{{ .Values.probo.tracing.flowlines.collector.image.tag }}"
+          imagePullPolicy: {{ .Values.probo.tracing.flowlines.collector.image.pullPolicy }}
+          args:
+            - "--config=/etc/otelcol-contrib/config.yaml"
+          env:
+            - name: FLOWLINES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ required "probo.tracing.flowlines.existingSecret.name is required when Flowlines tracing is enabled" .Values.probo.tracing.flowlines.existingSecret.name | quote }}
+                  key: {{ required "probo.tracing.flowlines.existingSecret.key is required when Flowlines tracing is enabled" .Values.probo.tracing.flowlines.existingSecret.key | quote }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            readOnlyRootFilesystem: true
+          resources:
+            {{- toYaml .Values.probo.tracing.flowlines.collector.resources | nindent 12 }}
+          volumeMounts:
+            - name: flowlines-otel-collector-config
+              mountPath: /etc/otelcol-contrib
+              readOnly: true
+        {{- end }}
       volumes:
         - name: data
         {{- if .Values.persistence.enabled }}
@@ -649,6 +681,11 @@ spec:
             claimName: {{ .Values.persistence.existingClaim | default (include "probo.fullname" .) }}
         {{- else }}
           emptyDir: {}
+        {{- end }}
+        {{- if .Values.probo.tracing.flowlines.enabled }}
+        - name: flowlines-otel-collector-config
+          configMap:
+            name: {{ include "probo.flowlinesCollectorName" . }}
         {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}

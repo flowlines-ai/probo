@@ -130,6 +130,11 @@ func NewMCPClientWithAccessToken(t require.TestingT, owner *Client, accessToken 
 	return mc
 }
 
+// AnalyticsSessionID returns the stable session identifier attached to tool-call traces.
+func (mc *MCPClient) AnalyticsSessionID() string {
+	return mc.analyticsSessionID
+}
+
 // jsonrpcRequest is a JSON-RPC 2.0 request.
 type jsonrpcRequest struct {
 	JSONRPC string `json:"jsonrpc"`

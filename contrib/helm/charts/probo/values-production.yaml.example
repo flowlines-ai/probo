@@ -329,11 +329,19 @@ probo:
   # OpenTelemetry tracing (optional)
   tracing:
     enabled: true
-    addr: "tempo.monitoring:4317"
+    addr: "tempo.monitoring:4318"
     maxBatchSize: 1000
     batchTimeout: 10
     exportTimeout: 30
     maxQueueSize: 10000
+    # Flowlines takes precedence over addr when enabled. Store the API key in
+    # the referenced Kubernetes Secret, never in this values file.
+    flowlines:
+      enabled: false
+      tracesEndpoint: "https://api-staging.flowlines.ai/v1/traces"
+      existingSecret:
+        name: "flowlines-credentials"
+        key: "api-key"
 
   # Custom domains with Let's Encrypt (optional, direct TLS mode only)
   customDomains:

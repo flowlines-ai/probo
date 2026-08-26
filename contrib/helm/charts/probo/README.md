@@ -206,11 +206,38 @@ The following parameters **must** be configured:
 
 See [values.yaml](values.yaml) for all available options.
 
+### Flowlines MCP observability
+
+The chart can run an OpenTelemetry Collector sidecar that receives Probo traces
+over OTLP/HTTP and exports them to Flowlines. The default traces endpoint is the
+staging endpoint `https://api-staging.flowlines.ai/v1/traces`.
+
+Store the Flowlines API key in your deployment secret manager and synchronize
+it to a Kubernetes Secret. Do not put the key in a values file. Enable the
+connector by referencing that Secret:
+
+```yaml
+probo:
+  tracing:
+    flowlines:
+      enabled: true
+      tracesEndpoint: "https://api-staging.flowlines.ai/v1/traces"
+      existingSecret:
+        name: flowlines-credentials
+        key: api-key
+```
+
+The sidecar reads the secret key into `FLOWLINES_API_KEY` and sends it as the
+`x-flowlines-api-key` header. When enabled, it takes precedence over
+`probo.tracing.addr`; the API key is not copied into a ConfigMap or rendered
+manifest.
+
 ## Components
 
 The chart deploys the following:
 
 - **Probo Application**: Main Go binary serving GraphQL APIs and SPAs
+- **Flowlines OpenTelemetry Collector**: Optional trace-export sidecar
 - **Chrome Headless**: For PDF generation (optional, can use external)
 - **Ingress**: For external access with TLS (optional)
 

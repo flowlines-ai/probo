@@ -189,15 +189,34 @@ probo:
   # OpenTelemetry tracing configuration
   tracing:
     enabled: false
-    # OTLP/HTTP collector endpoint (for example, otel-collector:4318).
-    # For Flowlines, configure the collector's HTTP/protobuf exporter with
-    # https://api.flowlines.ai/v1/traces and inject x-flowlines-api-key from
-    # the collector's deployment secret manager.
+    # OTLP/HTTP collector endpoint (for example, otel-collector:4318). Ignored
+    # when the bundled Flowlines collector is enabled.
     addr: ""
     maxBatchSize: 512
     batchTimeout: 5
     exportTimeout: 30
     maxQueueSize: 2048
+
+    flowlines:
+      enabled: false
+      tracesEndpoint: "https://api-staging.flowlines.ai/v1/traces"
+      # The API key must be stored in a pre-existing Kubernetes Secret. It is
+      # never accepted through chart values or written to a ConfigMap.
+      existingSecret:
+        name: ""
+        key: "api-key"
+      collector:
+        image:
+          repository: otel/opentelemetry-collector-contrib
+          tag: "0.159.0"
+          pullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 250m
+            memory: 256Mi
+          requests:
+            cpu: 25m
+            memory: 64Mi
 
   # OAuth2 signing key used by bootstrap to sign auth tokens
   # REQUIRED: PEM-encoded private key (RSA is recommended)

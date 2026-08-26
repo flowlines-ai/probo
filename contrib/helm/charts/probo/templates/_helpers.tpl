@@ -159,6 +159,13 @@ Chrome DevTools Protocol address
 {{- end }}
 
 {{/*
+Flowlines collector resource name
+*/}}
+{{- define "probo.flowlinesCollectorName" -}}
+{{- printf "%s-flowlines-otel" (include "probo.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Validate a required 32-byte base64 secret.
 */}}
 {{- define "probo.requireBase64Key32" -}}

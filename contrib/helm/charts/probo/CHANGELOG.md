@@ -4,6 +4,11 @@ All notable changes to the Probo Helm chart will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- Optional Flowlines OpenTelemetry Collector sidecar with a configurable traces
+  endpoint and API-key injection from an existing Kubernetes Secret
+
 ## [0.19.0] - 2026-08-24
 
 ### Added

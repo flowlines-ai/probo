@@ -22,7 +22,7 @@ require (
 	github.com/chromedp/chromedp v0.16.0
 	github.com/crewjam/saml v0.5.1
 	github.com/digitorus/timestamp v0.0.0-20250524132541-c45532741eea
-	github.com/go-chi/chi/v5 v5.3.1
+	github.com/go-chi/chi/v5 v5.4.0
 	github.com/go-chi/cors v1.2.2
 	github.com/go-git/go-git/v5 v5.19.2
 	github.com/jackc/pgx/v5 v5.10.0
